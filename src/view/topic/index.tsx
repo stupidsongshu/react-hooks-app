@@ -3,6 +3,7 @@ import { useParams, useHistory } from 'react-router-dom'
 
 import SDK, { TopicTabEnum } from '../../service/cnode'
 
+import ScrollList from '../../components/scroll-list'
 import Card, { createSkeleton } from './card/card'
 import { Topic as TopicType } from '../../types'
 import isEmpty from '../../utils/isEmpty'
@@ -25,19 +26,6 @@ const Topic: React.FC = () => {
       })
   }, [tag])
 
-  const getTopicByTab = useCallback((info) => {
-    console.log(tag, info)
-    // const sdk = new SDK()
-    // sdk.get('/topics', {
-    //   page: 1,
-    //   tab: tag
-    // }).then(res => {
-    //   console.log(res)
-    // })
-  }, [tag])
-
-  getTopicByTab({})
-
   const visitArticle = (info: TopicType) => {
     history.push({
       pathname: `/article?id=${info.id}`,
@@ -47,10 +35,22 @@ const Topic: React.FC = () => {
 
   const hasList = useMemo(() => !isEmpty(data), [data])
 
+  const handleOnLoad = () => {
+    console.log('onLoad')
+  }
+  const loading = true
   return <>
     {
-      hasList
-      && data.map((item: TopicType) => <Card key={item.id} data={item} onClick={() => visitArticle(item)} />)
+      hasList &&
+      <ScrollList
+        loading={loading}
+        completed={!loading}
+        onLoad={handleOnLoad}
+        >
+        {
+          data.map((item: TopicType) => <Card key={item.id} data={item} onClick={() => visitArticle(item)} />)
+        }
+      </ScrollList>
     }
     { !hasList && Skeleton }
   </>
