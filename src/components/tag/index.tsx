@@ -41,7 +41,7 @@ const TagUI = styled.label<{ color: string }>`
 `;
 
 const Tag: React.FC<Iprops> = (props: Iprops) => {
-  const { type } = props
+  const { type = 'default' } = props
   return <TagUI color={DICT[type].color}>{DICT[type].text}</TagUI>
 }
 

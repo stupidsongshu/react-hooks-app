@@ -39,4 +39,4 @@ class CnodeSDK extends SDK {
   getTopicDetail() {}
 }
 
-export default CnodeSDK
+export default new CnodeSDK()

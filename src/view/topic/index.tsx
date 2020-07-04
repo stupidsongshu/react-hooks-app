@@ -1,30 +1,42 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
-import SDK, { TopicTabEnum } from '../../service/cnode'
+import sdk from '../../service/cnode'
 
 import ScrollList from '../../components/scroll-list'
 import Card, { createSkeleton } from './card/card'
 import { Topic as TopicType } from '../../types'
 import isEmpty from '../../utils/isEmpty'
 
+import useLoadMore from '../../hooks/useLoadMore'
+
+const PAGE_SIZE = 20
+
 const Skeleton = createSkeleton(5)
 
 const Topic: React.FC = () => {
   const { tag = '' } = useParams()
-  const [data, setData] = useState([])
   const history = useHistory()
 
-  useEffect(() => {
-    console.log(TopicTabEnum)
-    const sdk = new SDK()
-
-    sdk.getTopicsByTab(tag)
-      .then(res => {
-        console.log(res)
-        setData(res.data)
-      })
+  const getTopicsByTab = useCallback((info) => {
+    return sdk.getTopicsByTab(tag, info.page || 1, PAGE_SIZE)
   }, [tag])
+
+  const { list, loading, completed, loadMore } = useLoadMore(
+    getTopicsByTab,
+    {
+      mannual: true,
+      formatResult: ({ response: { data = [] } = {} }) => ({
+        list: data
+      }),
+      isNoMore: ({ data }) => {
+        return data && data.length > PAGE_SIZE
+      }
+    },
+    [tag]
+  )
+
+  const hasList = useMemo(() => !isEmpty(list), [list])
 
   const visitArticle = (info: TopicType) => {
     history.push({
@@ -33,22 +45,16 @@ const Topic: React.FC = () => {
     })
   }
 
-  const hasList = useMemo(() => !isEmpty(data), [data])
-
-  const handleOnLoad = () => {
-    console.log('onLoad')
-  }
-  const loading = true
   return <>
     {
       hasList &&
       <ScrollList
         loading={loading}
-        completed={!loading}
-        onLoad={handleOnLoad}
+        completed={completed}
+        onLoad={loadMore}
         >
         {
-          data.map((item: TopicType) => <Card key={item.id} data={item} onClick={() => visitArticle(item)} />)
+          list.map((item: TopicType) => <Card key={item.id} data={item} onClick={() => visitArticle(item)} />)
         }
       </ScrollList>
     }
