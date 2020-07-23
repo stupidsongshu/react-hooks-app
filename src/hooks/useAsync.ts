@@ -17,7 +17,7 @@ interface ErrorHandler {
 }
 
 const defaultOption = {
-  mannual: false,
+  manual: false,
   onSuccess: noop as SuccessHandler,
   onError: noop as ErrorHandler,
 }
@@ -30,8 +30,7 @@ interface Option extends Partial<typeof defaultOption> {
 interface AsyncResult<T> {
   loading: boolean;
   run: () => void;
-  run1?(): void;
-  run2?: () => void;
+  // run1?(): void;
   result: T | undefined;
 }
 
@@ -70,7 +69,7 @@ const useAsync = <T>(
   )
 
   useEffect(() => {
-    !option.mannual && run()
+    !option.manual && run()
   }, [])
 
   return {

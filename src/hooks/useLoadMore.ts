@@ -9,7 +9,7 @@ const defaultOption = {
 }
 
 interface Option extends Partial<typeof defaultOption> {
-  mannual?: boolean;
+  manual?: boolean; // 是否手动
   defaultResult?: { list: Array<any> };
   formatResult? <T>(res: any): { list: Array<T> };
   isNoMore? (res: any): boolean;
@@ -39,7 +39,7 @@ export default (
   }, [action])
 
   const { loading, run, result } = useAsync(actionHandler, {
-    mannual: option.mannual || false,
+    manual: option.manual || false,
     onSuccess: (res: { list?: any }) => {
       const prevList = infoRef.current.list
       const currentPage = infoRef.current.page

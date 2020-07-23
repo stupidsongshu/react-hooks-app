@@ -6,6 +6,8 @@ import Header from '../../components/header'
 import Tabbar, { Tabber } from '../../components/tabbar'
 
 import Topic from '../../view/topic'
+import Article from '../../view/article'
+import User from '../../view/user'
 import About from '../../view/about'
 import NotFound from '../../view/not-found'
 
@@ -30,6 +32,8 @@ const BaseLayout = () => {
         <Switch>
           <Redirect from="/" to="/topic/all" exact />
           <Route path={'/topic/:tag'} component={Topic} exact />
+          <Route path={'/article/:id'} component={Article} exact />
+          <Route path={'/user/:name'} component={User} exact />
           <Route path="/about" component={About} exact />
           <Route path="*" component={NotFound} />
         </Switch>

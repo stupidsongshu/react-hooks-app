@@ -36,7 +36,21 @@ class CnodeSDK extends SDK {
     })
   }
 
-  getTopicDetail() {}
+  /**
+   * 主题详情
+   * @param {string | number} id
+   */
+  getTopicDetail(id: string | number): Promise<ResponseFormat> {
+    return this.get(`/topic/${id}`)
+  }
+
+  /**
+   * 用户详情
+   * @param {string} name 
+   */
+  getUserDetail(name: string): Promise<ResponseFormat> {
+    return this.get(`/user/${name}`)
+  }
 }
 
 export default new CnodeSDK()

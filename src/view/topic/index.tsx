@@ -22,10 +22,12 @@ const Topic: React.FC = () => {
     return sdk.getTopicsByTab(tag, info.page || 1, PAGE_SIZE)
   }, [tag])
 
+  const manual = true
+
   const { list, loading, completed, loadMore } = useLoadMore(
     getTopicsByTab,
     {
-      mannual: true,
+      manual,
       formatResult: ({ response: { data = [] } = {} }) => ({
         list: data
       }),
@@ -36,11 +38,24 @@ const Topic: React.FC = () => {
     [tag]
   )
 
+  // useEffect(() => {
+  //   if (manual) {
+  //     // getTopicsByTab({}).then(resp => {
+  //     //   console.log(resp)
+  //     //   loading = false
+  //     //   list = resp.data
+  //     // })
+  //     loadMore()
+  //   }
+  // }, [tag])
+
   const hasList = useMemo(() => !isEmpty(list), [list])
 
   const visitArticle = (info: TopicType) => {
     history.push({
-      pathname: `/article?id=${info.id}`,
+      // pathname: `/article`,
+      // search: info.id,
+      pathname: `/article/${info.id}`,
       state: info
     })
   }
