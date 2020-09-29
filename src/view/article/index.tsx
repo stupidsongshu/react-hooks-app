@@ -19,13 +19,6 @@ interface TopicDetailResult {
 const Article: React.FC = () => {
   const { id = '' } = useParams()
   let info = useLocation().state as ArticleType
-  // console.log(id)
-  // console.log(info)
-  // useEffect(() => {
-  //   sdk.getTopicDetail(id).then((resp) => {
-  //     console.log(resp)
-  //   })
-  // }, [])
 
   const { loading, result = { data: {} as ArticleType } } = useAsync<TopicDetailResult>(() => sdk.getTopicDetail(id))
   info = isEmpty(result.data) || loading ? info : result.data
@@ -33,12 +26,12 @@ const Article: React.FC = () => {
   // window.PR 代码高亮，使用的外部js文件
   Promise.resolve().then(() => {
     // console.log(window.PR)
-    window.PR.prettyPrint()
+    window.PR?.prettyPrint()
   })
 
   return (
     <ArticleWrapper>
-      { info.hasOwnProperty('content')
+      { info && info.hasOwnProperty('content')
       ? (
       <>
         <Title>{info && info.title}</Title>
