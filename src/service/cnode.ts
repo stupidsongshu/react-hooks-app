@@ -51,6 +51,14 @@ class CnodeSDK extends SDK {
   getUserDetail(name: string): Promise<ResponseFormat> {
     return this.get(`/user/${name}`)
   }
+
+  /**
+   * 用户所收藏的主题
+   * @param {String} username
+   */
+  getTopicCollect(username: string) {
+    return this.get(`/topic_collect/${username}`)
+  }
 }
 
 export default new CnodeSDK()
