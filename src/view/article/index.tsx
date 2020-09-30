@@ -8,6 +8,7 @@ import useAsync from '../../hooks/useAsync'
 import isEmpty from '../../utils/isEmpty'
 import ArticleWrapper, { Title, SkeletonMain } from './style'
 import InfoBar from './info-bar'
+import CommentPanel, { SkeletonComment } from './comment-panel'
 
 import 'github-markdown-css'
 import './code-prettify-sunburst.css'
@@ -42,6 +43,11 @@ const Article: React.FC = () => {
         ></div>
       </>)
       : <SkeletonMain /> }
+
+      { info && info.replies ?
+        <CommentPanel list={info.replies} articleAuthor={info.author.loginname} />
+        : <SkeletonComment />
+      }
     </ArticleWrapper>
   )
 }
